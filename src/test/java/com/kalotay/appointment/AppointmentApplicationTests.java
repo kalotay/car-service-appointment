@@ -1,11 +1,8 @@
 package com.kalotay.appointment;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNot.not;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
@@ -33,6 +30,31 @@ class AppointmentApplicationTests {
         .expectStatus().isOk()
         .expectBody(Appointment.class)
         .value(a -> a.getId(), not(nullValue()))
+        .value(a -> a.getAppointmentTime(), equalTo(appointmentTime))
+        .value(a -> a.getPrice(), equalTo(price))
+        .value(a -> a.getDetails(), equalTo(details));
+  }
+
+  @Test
+  void appointmentCanFetched() {
+    LocalDateTime appointmentTime = LocalDateTime.now();
+    double price = 52.3;
+    String details = "oil change";
+
+    Appointment appointment = webTestClient.post()
+        .uri("/appointment")
+        .bodyValue(new Appointment(null, appointmentTime, price, details))
+        .exchange()
+        .expectStatus().isOk()
+        .returnResult(Appointment.class).getResponseBody().blockFirst();
+
+    String id = appointment.getId();
+    webTestClient.get()
+        .uri("/appointment/{id}", id)
+        .exchange()
+        .expectStatus().isOk()
+        .expectBody(Appointment.class)
+        .value(a -> a.getId(), equalTo(id))
         .value(a -> a.getAppointmentTime(), equalTo(appointmentTime))
         .value(a -> a.getPrice(), equalTo(price))
         .value(a -> a.getDetails(), equalTo(details));
