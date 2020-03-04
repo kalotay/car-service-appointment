@@ -5,7 +5,7 @@ A REST API for car service appointment.
 ## technology considerations
 
 Computing platform is JVM 11.
-Language used is Java or Kotlin.
+Language used is Java
 Web framework is Spring Boot.
 API communicating with JSON.
 Built using maven (spring default) or gradle.
