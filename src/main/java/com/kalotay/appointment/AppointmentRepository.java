@@ -4,5 +4,5 @@ import java.util.Optional;
 
 public interface AppointmentRepository {
   Appointment create(Appointment appointment);
-  Optional<Appointment> fetch(String id);
+  Optional<Appointment> fetch(Long id);
 }

@@ -23,7 +23,7 @@ public class AppointmentController {
   }
 
   @GetMapping("/appointment/{id}")
-  public Appointment fetch(@PathVariable String id) {
+  public Appointment fetch(@PathVariable long id) {
     return appointmentRepository.fetch(id).orElseThrow(NotFoundException::new);
   }
 }

@@ -1,12 +1,16 @@
 package com.kalotay.appointment;
 
+import static com.kalotay.appointment.Helpers.getAppointmentTime;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -26,7 +30,7 @@ public abstract class AppointmentRepositoryTests {
 
   @Test
   void appointmentCanBeCreated() {
-    LocalDateTime appointmentTime = LocalDateTime.now();
+    LocalDateTime appointmentTime = getAppointmentTime();
     double price = 52.3;
     String details = "oil change";
     Appointment toCreate = new Appointment(null, appointmentTime, price, details);
@@ -48,21 +52,23 @@ public abstract class AppointmentRepositoryTests {
 
   @Test
   void fetchReturnsEmptyForUnknownId() {
-    Optional<Appointment> appointment = repository.fetch("foo");
+    Optional<Appointment> appointment = repository.fetch(123L);
     assertThat(appointment.isEmpty(), equalTo(true));
   }
 
   @Test
   void createdAppointmentCanBeFetched() {
-    LocalDateTime appointmentTime = LocalDateTime.now();
+    LocalDateTime appointmentTime = getAppointmentTime();
     double price = 52.3;
     String details = "oil change";
     Appointment created = repository.create(new Appointment(null, appointmentTime, price, details));
-    String id = created.getId();
-    Appointment fetched = repository.fetch(id).orElseThrow();
+    Long id = created.getId();
+    Optional<Appointment> fetch = repository.fetch(id);
+    Appointment fetched = fetch.orElseThrow();
     assertThat(created.getAppointmentTime(), equalTo(fetched.getAppointmentTime()));
     assertThat(created.getPrice(), equalTo(fetched.getPrice()));
     assertThat(created.getDetails(), equalTo(fetched.getDetails()));
   }
+
 
 }

@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: kalotay
+      changes:
+        - createTable:
+            tableName: appointment
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: appointment_time
+                  type: timestamp
+              - column:
+                  name: price
+                  type: double precision
+              - column:
+                  name: details
+                  type: text

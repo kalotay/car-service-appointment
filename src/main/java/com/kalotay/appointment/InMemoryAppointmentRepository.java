@@ -4,16 +4,19 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Service;
 
 @Service
 public class InMemoryAppointmentRepository implements AppointmentRepository {
 
-  private final ConcurrentMap<String, Appointment> store = new ConcurrentHashMap<>();
+  AtomicLong counter = new AtomicLong();
+
+  private final ConcurrentMap<Long, Appointment> store = new ConcurrentHashMap<>();
 
   @Override
   public Appointment create(Appointment appointment) {
-    String id = UUID.randomUUID().toString();
+    long id = counter.incrementAndGet();
     Appointment toStore = new Appointment(id, appointment.getAppointmentTime(),
         appointment.getPrice(), appointment.getDetails());
     store.put(id, toStore);
@@ -21,7 +24,7 @@ public class InMemoryAppointmentRepository implements AppointmentRepository {
   }
 
   @Override
-  public Optional<Appointment> fetch(String id) {
+  public Optional<Appointment> fetch(Long id) {
     return Optional.ofNullable(store.get(id));
   }
 }
