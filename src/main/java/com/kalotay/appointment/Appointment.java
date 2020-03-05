@@ -13,7 +13,7 @@ public final class Appointment {
 
   private final String details;
 
-  Appointment(Long id, LocalDateTime appointmentTime, double price, String details) {
+  public Appointment(Long id, LocalDateTime appointmentTime, double price, String details) {
     this.id = id;
     this.appointmentTime = appointmentTime;
     this.price = price;
