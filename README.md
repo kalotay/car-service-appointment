@@ -36,3 +36,12 @@ To run the app use `./gradlew bootRun`. To run tests use `./gradlew check`.
 * Travis CI.
 * PostreSQL as data store.
 * liquibase for db migration.
+
+## TODO
+
+* Use Kotlin. Had issues with compiler versions.
+* Don't expose sequential db generated id as external appointment id. e.g. UUID would be better.
+Spring Data seems to encourage using db generated id.
+* Monitoring + logging
+* Better database endpoint configuration.
+* Non happy path tests.
